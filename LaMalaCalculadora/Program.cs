@@ -7,17 +7,18 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using Xceed.Document.NET;
 
 namespace BadCalcVeryBad
 {
-  
+
 
     public class U
     {
-        public static ArrayList G = new ArrayList(); 
-        public static string last = "";
-        public static int counter = 0;
-        public string misc;
+        private readonly ArrayList G = new ArrayList();
+        public const string last = "";
+        public const int counter = 0;
+        public const string Misc = "";
     }
 
     public class ShoddyCalc
