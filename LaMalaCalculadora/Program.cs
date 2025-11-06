@@ -15,10 +15,10 @@ namespace BadCalcVeryBad
 
     public class U
     {
-        private readonly ArrayList G = new ArrayList();
+        public readonly ArrayList G = new ArrayList();
         public const string last = "";
         public const int counter = 0;
-        public const string Misc = "";
+        public string Misc;
     }
 
     public class ShoddyCalc
@@ -77,7 +77,7 @@ namespace BadCalcVeryBad
     class Program
     {
         public static ShoddyCalc calc = new ShoddyCalc();
-        public static U globals = new U();
+        public U globals = new U();
 
         static void Main(string[] args)
         {
