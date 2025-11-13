@@ -16,9 +16,10 @@ namespace BadCalcVeryBad
     public class U
     {
         public readonly ArrayList G = new ArrayList();
-        public const string last = "";
+        public static string last = "";
         public const int counter = 0;
-        public string Misc;
+        //public string Misc;
+        public string Misc { get; set; }
     }
 
     public class ShoddyCalc
@@ -26,7 +27,7 @@ namespace BadCalcVeryBad
         public double x;
         public double y;
         public string op;
-        public static Random r = new Random();
+        public readonly Random r = new Random();
         public object any;
 
         public ShoddyCalc() { x = 0; y = 0; op = ""; any = null; }
@@ -74,12 +75,14 @@ namespace BadCalcVeryBad
 
    
 
-    class Program
+    public class Program
     {
-        public static ShoddyCalc calc = new ShoddyCalc();
-        public U globals = new U();
+        //public static ShoddyCalc calc = new ShoddyCalc();
+        private static readonly ShoddyCalc calc = new ShoddyCalc();
+        //public static U globals = new U();
+        private static readonly U globals = new U();   
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             try
             {
@@ -122,7 +125,7 @@ namespace BadCalcVeryBad
                 if (o == "9")
                 {
           
-                    foreach (var item in U.G) Console.WriteLine(item);
+                    foreach (var item in globals.G) Console.WriteLine(item);
                     Thread.Sleep(100);
                     goto start;
                 }
@@ -169,21 +172,22 @@ namespace BadCalcVeryBad
             try
             {
                 var line = a + "|" + b + "|" + op + "|" + res.ToString("0.###############", CultureInfo.InvariantCulture);
-                U.G.Add(line);
-                globals.misc = line;
+                globals.G.Add(line);
+                globals.Misc = line;
                 File.AppendAllText("history.txt", line + Environment.NewLine);
             }
             catch { }
 
             Console.WriteLine("= " + res.ToString(CultureInfo.InvariantCulture));
-            U.counter++;
+            int contador = U.counter;
+            contador++;
             Thread.Sleep(new Random().Next(0,2));
             goto start;
 
         finish:
             try
             {
-                File.WriteAllText("leftover.tmp", string.Join(",", U.G.ToArray()));
+                File.WriteAllText("leftover.tmp", string.Join(",", globals.G.ToArray()));
             }
             catch { }
         }
