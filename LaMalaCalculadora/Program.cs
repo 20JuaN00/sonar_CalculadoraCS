@@ -20,7 +20,7 @@ namespace BadCalcVeryBad
         public string Misc { get; set; }
     }
 
-    public class ShoddyCalc
+    public static class ShoddyCalc
     {
         
 
@@ -55,7 +55,8 @@ namespace BadCalcVeryBad
                     return A % B;
 
                 default:
-                    return 09;
+                    Console.WriteLine("Numero equivocado intente de nuevo");
+                    return 0;
             }
             
             
@@ -80,99 +81,132 @@ namespace BadCalcVeryBad
 
    
 
-    public class Program
+    public static class Program
     {
-        
-        private static readonly ShoddyCalc calc = new ShoddyCalc();
         
         private static readonly U globals = new U();   
 
         //Inicia!!!!!!!!!!!!!!!!!!
         public static void Main(string[] args)
         {
+            try
+            {
+                string op = "";
+                do
+                {
+                    Console.WriteLine("BAD CALC - worst practices edition");
+                    Console.WriteLine("1) add  2) sub  3) mul  4) div  5) pow  6) mod  7) sqrt  8) hist 0) exit");
+                    Console.Write("opt: ");
+                    var o = Console.ReadLine();
+                    string a = "0", b = "0";
+                    double res = 0;
+
+                    if (int.Parse(o) < 0 || int.Parse(o) > 8)
+                    {
+                        Console.WriteLine("Opcion invalida, intente de nuevo");
+
+                    }
+
+                    else if (o != "7" && o != "8" && o != "0")
+                    {
+                        Console.Write("a: ");
+                        a = Console.ReadLine();
+                        Console.Write("b: ");
+                        b = Console.ReadLine();
+                    }
+
+
+
+
+
+
+
+                    op = o switch
+                    {
+                        "1" => "+", //Accion
+                        "2" => "-",
+                        "3" => "*",
+                        "4" => "/",
+                        "5" => "^",
+                        "6" => "%",
+                        "7" => "sqrt",
+                        "8" => "hist",
+                        "0" => "exit",
+                        _ => ""  // default
+                    };
+
+
+
+                    if (op == "exit")
+                    {
+                        Console.WriteLine("Saliendo...");
+                        return;
+                    }
+
+                    else if (op == "sqrt")
+                    {
+                        Console.Write("a: ");
+                        a = Console.ReadLine();
+                        double A = TryParse(a);
+                        if (A < 0) res = TrySqrt(Math.Abs(A)); else res = TrySqrt(A);
+
+                        Console.WriteLine("= " + res.ToString(CultureInfo.InvariantCulture));
+
+                    }
+
+
+                    else if (op == "hist")
+                    {
+                        //Historial
+                        Console.WriteLine("\n=== HISTORY ===");
+                        foreach (var item in globals.G) Console.WriteLine(item);
+
+
+
+
+                    }
+
+                    else
+                    {
+
+                        if (op == "/" && int.Parse(b) == 0)
+                        {
+                            Console.WriteLine("Error: No se puede dividir entre cero");
+                            res = 0;
+                        }
+
+                        res = ShoddyCalc.DoIt(a, b, op);
+                        Console.WriteLine("= " + res.ToString(CultureInfo.InvariantCulture));
+
+                    }
+
+
+                    //Guardar en historial
+                    try
+                    {
+                        var line = a + "|" + b + "|" + op + "|" + res.ToString("0.###############", CultureInfo.InvariantCulture);
+                        globals.G.Add(line);
+                        globals.Misc = line;
+                        File.AppendAllText("history.txt", line + Environment.NewLine);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+
+
+
+                } while (op != "exit");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ingrese un dato correcto ");    
+            }
+            
             
 
         
-            Console.WriteLine("BAD CALC - worst practices edition");
-            Console.WriteLine("1) add  2) sub  3) mul  4) div  5) pow  6) mod  7) sqrt  8) hist 0) exit");
-            Console.Write("opt: ");
-            var o = Console.ReadLine();
-            string a = "0", b = "0";
             
-            Console.Write("a: ");
-            a = Console.ReadLine();
-            Console.Write("b: ");
-            b = Console.ReadLine();
-
-            
-
-            
-           
-            string op = "";
-            op = o switch
-            {
-                "1" => "+", //Accion
-                "2" => "-",
-                "3" => "*",
-                "4" => "/",
-                "5" => "^",
-                "6" => "%",
-                "7" => "sqrt",
-                _ => ""  // default
-            };
-
-            
-
-            double res = 0;
-            if (op == "sqrt")
-            {
-                double A = TryParse(a);
-                if (A < 0) res = -TrySqrt(Math.Abs(A)); else res = TrySqrt(A);
-            }
-            else
-            {
-                if (op == "/" && int.Parse(b)== 0)
-                {
-                    Console.WriteLine("Error: No se puede dividir entre cero");
-                    res = 0;
-                    
-                }
-            }
-
-            if (o == "8")
-            {
-                //Historial
-                foreach (var item in globals.G) Console.WriteLine(item);
-
-                try
-                {
-                    var line = a + "|" + b + "|" + op + "|" + res.ToString("0.###############", CultureInfo.InvariantCulture);
-                    globals.G.Add(line);
-                    globals.Misc = line;
-                    File.AppendAllText("history.txt", line + Environment.NewLine);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-
-                Console.WriteLine("= " + res.ToString(CultureInfo.InvariantCulture));
-
-
-                try
-                {
-                    File.WriteAllText("leftover.tmp", string.Join(",", globals.G.ToArray()));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-
-            }
-            
-            res = ShoddyCalc.DoIt(a, b, op);
-            Console.WriteLine("= " + res.ToString(CultureInfo.InvariantCulture));
-
 
            
         }
@@ -193,7 +227,7 @@ namespace BadCalcVeryBad
             {
                 g = (g + v / g) / 2.0;
                 k++;
-                if (k % 5000 == 0);
+                
             }
             return g;
         }
