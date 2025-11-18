@@ -13,52 +13,52 @@
     {
 
 
-        public class U
+        public class DatosGlobales
         {
-            public readonly ArrayList G = new ArrayList();
-            public const int counter = 0;
+            public readonly ArrayList Historial = new ArrayList();
+            public const int contador = 0;
             public string Misc { get; set; }
         }
 
-        public static class ShoddyCalc
+        public static class Calculadora
         {
         
 
-            public static double DoIt(string a, string b, string o)
+            public static double Calcular(string a, string b, string operador)
             {
-                double A = TryParse(a);
-                double B = TryParse(b);
+                double NumA = ConvertirTexto(a);
+                double NumB = ConvertirTexto(b);
 
             
 
-                switch (o)
+                switch (operador)
                 {
                     case "+":
-                        return A + B;
+                        return NumA + NumB;
 
                     case "-":
-                        return A - B;
+                        return NumA + NumB;
 
-                    case "*":
-                        return A * B;
+                case "*":
+                        return NumA + NumB;
 
-                    case "/":
-                        if (Math.Abs(B) < 0.0000001)  
+                case "/":
+                        if (Math.Abs(NumB) < 0.0000001)  
                         {
                             throw new DivideByZeroException("No se puede dividir entre cero");
                         }
-                    return A / B;
+                        return NumA + NumB;
 
 
 
                 case "^":
                         double z = 1;
-                        int i = (int)B;
-                        while (i > 0) { z *= A; i--; }
+                        int i = (int)NumB;
+                        while (i > 0) { z *= NumA; i--; }
                         return z;
 
                     case "%":
-                        return A % B;
+                        return NumA % NumB;
 
                     default:
                         Console.WriteLine("Numero equivocado intente de nuevo");
@@ -68,11 +68,11 @@
             
             
 
-                static double TryParse(string s)
+                static double ConvertirTexto(string texto)
                 {
                     try
                     {
-                        return double.Parse(s.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        return double.Parse(texto.Replace(',', '.'), CultureInfo.InvariantCulture);
                     }
                     catch (Exception ex)
                     {
@@ -90,14 +90,14 @@
         public static class Program
         {
         
-            private static readonly U globals = new U();   
+            private static readonly DatosGlobales globals = new DatosGlobales();   
 
             //Inicia!!!!!!!!!!!!!!!!!!
             public static void Main(string[] args)
             {
                 try
                 {
-                    string op = "";
+                    string operacion = "";
                     do
                     {
                         Console.WriteLine("BAD CALC - worst practices edition");
@@ -113,7 +113,7 @@
                             continue;
                         }
 
-                        op = o switch
+                        operacion = o switch
                         {
                             "1" => "+", //Accion
                             "2" => "-",
@@ -128,17 +128,17 @@
                         };
 
 
-                        if (op == "exit")
+                        if (operacion == "exit")
                         {
                             Console.WriteLine("Saliendo...");
                             return;
                         }
 
-                        else if (op == "hist")
+                        else if (operacion == "hist")
                         {
                             //Historial
                             Console.WriteLine("\n=== HISTORY ===");
-                            foreach (var item in globals.G) Console.WriteLine(item);
+                            foreach (var item in globals.Misc) Console.WriteLine(item);
                         continue;
 
 
@@ -148,14 +148,14 @@
                         Console.Write("a: ");
                         a = Console.ReadLine();
 
-                        if (op != "sqrt" )
+                        if (operacion != "sqrt" )
                         {
                         
                             Console.Write("b: ");
                             b = Console.ReadLine();
                         }
 
-                         if (op == "sqrt")
+                         if (operacion == "sqrt")
                          {
                         
                             double A = TryParse(a);
@@ -173,7 +173,7 @@
 
                             
 
-                            res = ShoddyCalc.DoIt(a, b, op);
+                            res = Calculadora.Calcular(a, b, operacion);
                         
 
                         }
@@ -182,8 +182,8 @@
                         //Guardar en historial
                         try
                         {
-                            var line = a + "|" + b + "|" + op + "|" + res.ToString("0.###############", CultureInfo.InvariantCulture);
-                            globals.G.Add(line);
+                            var line = a + "|" + b + "|" + operacion + "|" + res.ToString("0.###############", CultureInfo.InvariantCulture);
+                            globals.Historial.Add(line);
                             globals.Misc = line;
                             File.AppendAllText("history.txt", line + Environment.NewLine);
                         }
@@ -194,7 +194,7 @@
 
 
 
-                    } while (op != "exit");
+                    } while (operacion != "exit");
                 }
                 catch (Exception ex)
                 {
