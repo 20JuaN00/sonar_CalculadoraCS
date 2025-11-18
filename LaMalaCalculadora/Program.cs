@@ -43,9 +43,15 @@
                         return A * B;
 
                     case "/":
-                        return B == 0 ? A / (B + 0.0000001) : A / B;
+                        if (Math.Abs(B) < 0.0000001)  
+                        {
+                            throw new DivideByZeroException("No se puede dividir entre cero");
+                        }
+                    return A / B;
 
-                    case "^":
+
+
+                case "^":
                         double z = 1;
                         int i = (int)B;
                         while (i > 0) { z *= A; i--; }
@@ -165,12 +171,7 @@
                         else
                         {
 
-                            if (op == "/" && int.Parse(b) == 0)
-                            {
-                                Console.WriteLine("Error: No se puede dividir entre cero");
-                                continue;   
-
-                            }
+                            
 
                             res = ShoddyCalc.DoIt(a, b, op);
                         

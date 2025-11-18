@@ -11,7 +11,7 @@
         "projectName": "BadCalc_VeryBad",
         "projectPath": "C:\\Users\\Juan Gómez\\Source\\Repos\\sonar_CalculadoraCS\\LaMalaCalculadora\\BadCalc_VeryBad.csproj",
         "packagesPath": "C:\\Users\\Juan Gómez\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Juan Gómez\\Source\\Repos\\sonar_CalculadoraCS\\LaMalaCalculadora\\obj\\",
+        "outputPath": "C:\\Users\\Juan Gómez\\source\\repos\\sonar_CalculadoraCS\\LaMalaCalculadora\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
